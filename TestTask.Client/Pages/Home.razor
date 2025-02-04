@@ -1,8 +1,42 @@
 ﻿@page "/"
-
 <PageTitle>Home</PageTitle>
 
-<h1>Кошелек.Ру Тестовое задание</h1>
-<NavLink href="/Writer" class="nav-link">Отправка сообщений</NavLink>
-<NavLink href="/StreamReader" class="nav-link">Потоковое чтение сообщений</NavLink>
-<NavLink href="/RangeReader" class="nav-link">Получить сообщения за период</NavLink>
+<style>
+    .container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 30px;
+    }
+    
+    .nav-link {
+        display: block;
+        padding: 15px;
+        margin: 10px 0;
+        background-color: #3498db;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        text-align: center;
+        transition: background-color 0.3s ease;
+    }
+
+    .nav-link:hover {
+        background-color: #2980b9;
+    }
+</style>
+
+<div class="container">
+    <h1>Кошелек.Ру Тестовое задание</h1>
+    <NavLink href="/Writer" class="nav-link">Отправка сообщений</NavLink>
+    <NavLink href="/StreamReader" class="nav-link">Потоковое чтение сообщений</NavLink>
+    <NavLink href="/RangeReader" class="nav-link">Получить сообщения за период</NavLink>
+</div>
