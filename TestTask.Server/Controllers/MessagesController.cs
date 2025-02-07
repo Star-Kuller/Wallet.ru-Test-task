@@ -14,13 +14,12 @@ namespace TestTask.Server.Controllers
         IMessagesWebsocketController websocketController) : ControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> GetMessages([FromQuery] DateTime? from, [FromQuery] DateTime? to)
+        public async Task<IEnumerable<Message>> GetMessages([FromQuery] DateTime? from, [FromQuery] DateTime? to)
         {
             if (from > to)
                 throw new ValidationException("Начальная дата не может быть больше конечной");
-            
-            //TODO Добавить логику
-            throw new NotImplementedException();
+            var messages = await repository.GetMessagesAsync(from, to);
+            return messages;
         }
         
         [HttpPost]

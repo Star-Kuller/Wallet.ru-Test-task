@@ -27,7 +27,7 @@ public static class DatabaseInitialize
 
     public static async Task CreateTablesIfNotExist(IDbConnectionFactory connectionFactory, ILogger logger)
     {
-        var conn = connectionFactory.NewConnection();
+        await using var conn = connectionFactory.NewConnection();
         await conn.OpenAsync();
 
         // Создаем таблицу, если она не существует
