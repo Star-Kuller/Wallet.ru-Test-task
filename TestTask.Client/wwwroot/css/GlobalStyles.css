@@ -1,55 +1,42 @@
-.container {
-    max-width: 800px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.messages-table {
+    width: 100%;
+    border-collapse: separate; /* Разделение границ для закругления углов */
+    border-spacing: 0; /* Убирает пробелы между ячейками */
+    font-family: Arial, sans-serif;
+    border: 1px solid #000000; /* Граница вокруг всей таблицы */
+    border-radius: 8px; /* Закругление углов таблицы */
+    overflow: hidden; /* Обрезка содержимого за пределами границ */
 }
 
-h1 {
-    text-align: center;
-    color: #2c3e50;
-    margin-bottom: 30px;
+/* Стиль для ячеек */
+.messages-table td, .messages-table th {
+    border: 1px solid #000000; /* Граница ячеек */
+    padding: 8px;
+    text-align: left;
 }
 
-.nav-link {
-    display: block;
-    padding: 15px;
-    margin: 10px 0;
-    background-color: #3498db;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    text-align: center;
-    transition: background-color 0.3s ease;
+/* Закругление углов для первой и последней строки */
+.messages-table tr:first-child td {
+    border-top-left-radius: 8px; /* Закругление верхнего левого угла */
+    border-top-right-radius: 8px; /* Закругление верхнего правого угла */
 }
 
-.nav-link:hover {
-    background-color: #2980b9;
+.messages-table tr:last-child td {
+    border-bottom-left-radius: 8px; /* Закругление нижнего левого угла */
+    border-bottom-right-radius: 8px; /* Закругление нижнего правого угла */
 }
 
-.error-container {
-    margin: 20px auto;
-    max-width: 800px;
-    padding: 15px;
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    border-radius: 5px;
-    animation: shake 0.5s ease-in-out;
+/* Стиль для строки с контентом */
+.messages-table tr td[colspan="3"] {
+    background-color: #b4b4b4; /* Фон для строки с контентом */
+    font-size: 14px;
+    word-wrap: break-word;
 }
 
-.error-message {
-    color: #721c24;
-    font-size: 16px;
-    text-align: center;
-    margin: 0;
+.messages-table tr:nth-child(even) {
+    background-color: #f9f9f9;
 }
 
-@keyframes shake {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    50% { transform: translateX(5px); }
-    75% { transform: translateX(-5px); }
-    100% { transform: translateX(0); }
+.messages-table tr:hover {
+    background-color: #f1f1f1;
 }

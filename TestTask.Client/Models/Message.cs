@@ -2,8 +2,10 @@ namespace TestTask.Client.Models;
 
 public class Message
 {
-    public long? Id { get; set; }
-    public int OrderNumber { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public string Content { get; set; } = string.Empty;
+    public long? Id { get; init; }
+    public int OrderNumber { get; init; }
+    public DateTime CreatedAt { get; init; }
+    public string Content { get; init; }
+    
+    public DateTime LocalCreatedAt => CreatedAt.ToLocalTime();
 }

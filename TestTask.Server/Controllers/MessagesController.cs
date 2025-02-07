@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TestTask.Server.DTOs;
-using TestTask.Server.Infrastructure;
+using TestTask.Server.Exceptions;
 using TestTask.Server.Interfaces;
 using TestTask.Server.Models;
 
@@ -17,7 +17,7 @@ namespace TestTask.Server.Controllers
         public async Task<IActionResult> GetMessages([FromQuery] DateTime? from, [FromQuery] DateTime? to)
         {
             if (from > to)
-                return BadRequest("Начальная дата не может быть больше конечной");
+                throw new ValidationException("Начальная дата не может быть больше конечной");
             
             //TODO Добавить логику
             throw new NotImplementedException();

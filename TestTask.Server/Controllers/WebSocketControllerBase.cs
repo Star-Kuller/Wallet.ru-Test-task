@@ -15,15 +15,15 @@ public abstract class WebSocketControllerBase : IWebsocketController
             var webSocket = await context.WebSockets.AcceptWebSocketAsync();
             Sockets.Add(webSocket);
             
-            OnClientConnected(webSocket);
+            await OnClientConnected(webSocket);
             try
             {
-                await WaitForClose(webSocket);
+                await Receive(webSocket);
             }
             finally
             {
                 Sockets.TryTake(out _);
-                OnClientDisconnected(webSocket);
+                await OnClientDisconnected(webSocket);
             }
         }
         else
@@ -32,11 +32,13 @@ public abstract class WebSocketControllerBase : IWebsocketController
         }
     }
     
-    private static async Task WaitForClose(WebSocket webSocket)
+    private async Task Receive(WebSocket webSocket)
     {
+        var buffer = new byte[1024 * 4];
         while (webSocket.State == WebSocketState.Open)
         {
-            var result = await webSocket.ReceiveAsync(new ArraySegment<byte>([]), CancellationToken.None);
+            var result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+            await OnReceive(result);
             if (result.MessageType == WebSocketMessageType.Close)
             {
                 await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Закрытие соединения", CancellationToken.None);
@@ -51,7 +53,7 @@ public abstract class WebSocketControllerBase : IWebsocketController
             await socket.SendAsync(new ArraySegment<byte>(messageBytes), WebSocketMessageType.Text, true, CancellationToken.None);
         }
     }
-    
-    protected virtual void OnClientConnected(WebSocket webSocket) { }
-    protected virtual void OnClientDisconnected(WebSocket webSocket) { }
+    protected virtual Task OnReceive(WebSocketReceiveResult result) => Task.CompletedTask;
+    protected virtual Task OnClientConnected(WebSocket webSocket) => Task.CompletedTask;
+    protected virtual Task OnClientDisconnected(WebSocket webSocket) => Task.CompletedTask;
 }

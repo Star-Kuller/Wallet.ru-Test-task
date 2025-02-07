@@ -1,0 +1,123 @@
+/* Глобальные стили */
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;
+}
+
+.nav-link {
+    display: block;
+    padding: 15px;
+    margin: 10px 0;
+    background-color: #3498db;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.nav-link:hover {
+    background-color: #2980b9;
+}
+
+/* Стиль для таблицы */
+.messages-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+}
+
+.messages-table td, .messages-table th {
+    border: 1px solid #000000;
+    padding: 8px;
+    background-color: #b4b4b4;
+}
+
+.messages-table th {
+    background-color: #2ecc71;
+    color: #fff;
+}
+
+.messages-table tr td[colspan="3"] {
+    background-color: #fff;
+    font-size: 14px;
+    word-wrap: break-word;
+}
+
+/* Чередование цветов строк */
+.messages-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Эффект при наведении */
+.messages-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Выравнивание текста в заголовках */
+.messages-table th:nth-child(1) {
+    text-align: center;
+}
+
+.messages-table th:nth-child(2) {
+    text-align: left;
+}
+
+.messages-table th:nth-child(3) {
+    text-align: right;
+}
+
+/* Выравнивание текста в данных */
+.messages-table td:nth-child(1) {
+    text-align: center;
+}
+
+.messages-table td:nth-child(2) {
+    text-align: left;
+}
+
+.messages-table td:nth-child(3) {
+    text-align: right;
+}
+
+/* Стиль для информационного сообщения */
+.info-text {
+    text-align: center;
+    font-size: 16px;
+    color: #333;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+/* Стиль для сообщения об отсутствии сообщений */
+.no-messages {
+    text-align: center;
+    font-size: 18px;
+    color: #555;
+    background-color: #e9ecef;
+    padding: 15px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    transition: all 0.3s ease;
+}
+
+.no-messages:hover {
+    background-color: #dee2e6;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}

@@ -9,14 +9,16 @@ namespace TestTask.Server.Controllers;
 public class MessagesWebsocketController(
     ILogger<MessagesController> logger) : WebSocketControllerBase, IMessagesWebsocketController
 {
-    protected override void OnClientConnected(WebSocket webSocket)
+    protected override Task OnClientConnected(WebSocket webSocket)
     {
         logger.LogInformation("Клиент подключен. Текущее количество клиентов: {SocketsCount}", Sockets.Count);
+        return Task.CompletedTask;
     }
     
-    protected override void OnClientDisconnected(WebSocket webSocket)
+    protected override Task OnClientDisconnected(WebSocket webSocket)
     {
         logger.LogInformation("Клиент отключен. Осталось клиентов: {SocketsCount}", Sockets.Count);
+        return Task.CompletedTask;
     }
     
     public async Task BroadcastMessageAsync(Message message, CancellationToken token = default)

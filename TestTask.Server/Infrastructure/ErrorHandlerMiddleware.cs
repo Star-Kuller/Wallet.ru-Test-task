@@ -1,3 +1,5 @@
+using TestTask.Server.Exceptions;
+
 namespace TestTask.Server.Infrastructure;
 
 public class ErrorHandlerMiddleware(RequestDelegate next)

@@ -1,4 +1,51 @@
 @page "/StreamReader"
+<PageTitle>Потоковое чтение сообщений</PageTitle>
 
-<NavLink href="/" class="nav-link">Назад</NavLink>
-<p>Состояние не сохраняется, отображаются сообщения, которые были приняты только за время пока страница активна</p>
+<div class="container">
+    <h1>Потоковое чтение сообщений</h1>
+    
+    <NavLink href="/" class="nav-link">Назад</NavLink>
+    
+    <p class="info-text">Состояние не сохраняется. Отображаются только те сообщения, которые были приняты пока страница активна.</p>
+
+    @if (_receivedMessages.Count == 0)
+    {
+        <div class="no-messages">
+            <p>Нет принятых сообщений.</p>
+        </div>
+    }
+    else
+    {
+        <div class="table-container">
+            <table class="messages-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Номер</th>
+                        <th>Дата/время</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var message in _receivedMessages)
+                {
+                    <tr>
+                        <td>@message.Id</td>
+                        <td>@message.OrderNumber</td>
+                        <td>@message.LocalCreatedAt</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">@message.Content</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+
+    @if (_error is not null)
+    {
+        <div class="error-container">
+            <p class="error-message">Ошибка: @_error.Message</p>
+        </div>
+    }
+</div>
