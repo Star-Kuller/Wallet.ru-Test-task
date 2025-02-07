@@ -3,7 +3,7 @@ using TestTask.Server.Models;
 
 namespace TestTask.Server.Interfaces;
 
-public interface IMessagesWebsocketController
+public interface IMessagesWebsocketController : IWebsocketController
 {
-    Task SendMessageAsync(Message message, CancellationToken token = default);
+    Task BroadcastMessageAsync(Message message, CancellationToken token = default);
 }

@@ -8,8 +8,8 @@
     <NavLink href="/" class="nav-link">Назад</NavLink>
     
     <div class="input-container">
-        <input type="text" value="@_userInput" @oninput="UpdateInput" maxlength="128" placeholder="Введите сообщение (до 128 символов)" />
-        <p class="char-counter">Осталось символов: @(128 - _userInput.Length)</p>
+        <input type="text" value="@_userInput" @oninput="UpdateInput" maxlength="@Maxlength" placeholder="Введите сообщение (до 128 символов)" />
+        <p class="char-counter">Осталось символов: @(Maxlength - _userInput.Length)</p>
     </div>
     
     <button @onclick="Submit" disabled="@(_userInput.Length == 0)" class="submit-button">Отправить</button>

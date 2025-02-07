@@ -32,6 +32,13 @@ builder.Services.AddSingleton<DatabaseParameters>(provider =>
 
 var app = builder.Build();
 
+app.UseWebSockets();
+
+app.Map("/wsMessages", async (HttpContext context, IMessagesWebsocketController messagesWsController) =>
+{
+    await messagesWsController.HandleWebSocket(context);
+});
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -40,6 +47,8 @@ if (app.Environment.IsDevelopment())
 }
 app.UseHttpsRedirection();
 app.MapControllers();
+
+app.UseMiddleware<ErrorHandlerMiddleware>();
 
 app.UseCors("AllowAll");
 

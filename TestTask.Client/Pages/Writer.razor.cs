@@ -7,6 +7,7 @@ namespace TestTask.Client.Pages;
 
 public partial class Writer: ComponentBase
 {
+    private const int Maxlength = 128;
     private record Error(string Message);
     private string _userInput = string.Empty;
     private Error? _error = null;
