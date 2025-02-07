@@ -4,6 +4,6 @@ namespace TestTask.Server.Interfaces;
 
 public interface IMessagesRepository
 {
-    Task<long> AddMessage(Message message);
-    Task<IEnumerable<long>> GetMessages(DateTime? from, DateTime? to);
+    Task AddMessageAsync(Message message, CancellationToken token = default);
+    Task<IEnumerable<long>> GetMessagesAsync(DateTime? from, DateTime? to, CancellationToken token = default);
 }

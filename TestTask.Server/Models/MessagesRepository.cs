@@ -2,14 +2,16 @@ using TestTask.Server.Interfaces;
 
 namespace TestTask.Server.Models;
 
-public class MessagesRepository : IMessagesRepository
+public class MessagesRepository(IDbConnectionFactory connectionFactory) : IMessagesRepository
 {
-    public Task<long> AddMessage(Message message)
+    public async Task AddMessageAsync(Message message, CancellationToken token = default)
     {
+        var conn = connectionFactory.NewConnection();
+        await conn.OpenAsync(token);
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<long>> GetMessages(DateTime? from, DateTime? to)
+    public async Task<IEnumerable<long>> GetMessagesAsync(DateTime? from, DateTime? to, CancellationToken token = default)
     {
         throw new NotImplementedException();
     }

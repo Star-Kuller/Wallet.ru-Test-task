@@ -1,4 +1,22 @@
 @page "/Writer"
 
-<NavLink href="/" class="nav-link">Назад</NavLink>
-<h3>Writer</h3>
+<PageTitle>Отправка сообщений</PageTitle>
+
+<div class="container">
+    <h1>Отправка сообщений</h1>
+    
+    <NavLink href="/" class="nav-link">Назад</NavLink>
+    
+    <div class="input-container">
+        <input type="text" value="@_userInput" @oninput="UpdateInput" maxlength="128" placeholder="Введите сообщение (до 128 символов)" />
+        <p class="char-counter">Осталось символов: @(128 - _userInput.Length)</p>
+    </div>
+    
+    <button @onclick="Submit" disabled="@(_userInput.Length == 0)" class="submit-button">Отправить</button>
+</div>
+@if (_error is not null)
+{
+    <div class="error-container">
+        <p class="error-message">Ошибка: @_error.Message</p>
+    </div>
+}

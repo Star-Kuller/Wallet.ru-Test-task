@@ -1,3 +1,3 @@
-namespace TestTask.Server.DTOs;
+namespace TestTask.Client.DTOs;
 
 public record MessageDto(int Number, string Content);
