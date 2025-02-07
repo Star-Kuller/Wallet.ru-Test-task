@@ -36,7 +36,7 @@ public static class DatabaseInitialize
                         CREATE TABLE IF NOT EXISTS messages (
                         Id BIGSERIAL PRIMARY KEY,
                         OrderNumber INTEGER NOT NULL,
-                        CreatedAt TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+                        CreatedAt TIMESTAMP NOT NULL,
                         Content TEXT NOT NULL
                     );
             """, conn);

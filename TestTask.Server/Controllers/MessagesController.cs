@@ -17,6 +17,7 @@ namespace TestTask.Server.Controllers
         {
             if (from > to)
                 return BadRequest("Начальная дата не может быть больше конечной");
+            
             //TODO Добавить логику
             throw new NotImplementedException();
         }
@@ -24,6 +25,9 @@ namespace TestTask.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateMessage([FromBody]MessageDto message)
         {
+            if (message.Content.Length > 128)
+                return BadRequest("Строка в сообщении превышает 128 символов");
+            
             logger.LogInformation("Создано сообщение {Message}", message);
             var messageEntity = new Message()
             {
