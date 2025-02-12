@@ -53,19 +53,6 @@
     text-align: right;
 }
 
-.info-text {
-    text-align: center;
-    font-size: 16px;
-    color: #333;
-    background-color: #f9f9f9;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-}
-
-
 .no-messages {
     text-align: center;
     font-size: 18px;

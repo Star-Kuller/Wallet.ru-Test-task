@@ -1,4 +1,58 @@
 @page "/RangeReader"
+<PageTitle>Получить сообщения за период</PageTitle>
 
-<NavLink href="/" class="nav-link">Назад</NavLink>
+<div class="container">
+    <h1>Получить сообщения за период</h1>
+    
+    <NavLink href="/" class="nav-link">Назад</NavLink>
 
+    <div class="date-picker-container">
+        <label for="startDate">Начальная дата:</label>
+        <input type="date" id="startDate" @bind="_startDate" />
+
+        <label for="endDate">Конечная дата:</label>
+        <input type="date" id="endDate" @bind="_endDate" />
+
+        <button class="request-button" @onclick="FetchMessages">Запросить</button>
+    </div>
+    
+    @if (_error is not null)
+    {
+        <div class="error-container">
+            <p class="error-message">Ошибка: @_error.Message</p>
+        </div>
+    }
+    @if (_receivedMessages.Count == 0)
+    {
+    <div class="no-messages">
+        <p>Нет сообщений за указанный период</p>
+    </div>
+    }
+    else
+    {
+    <div class="table-container">
+        <table class="messages-table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Номер</th>
+                <th>Дата/время</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var message in _receivedMessages)
+            {
+            <tr>
+                <td>@message.Id</td>
+                <td>@message.OrderNumber</td>
+                <td>@message.LocalCreatedAt</td>
+            </tr>
+            <tr>
+                <td colspan="3">@message.Content</td>
+            </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    }
+</div>

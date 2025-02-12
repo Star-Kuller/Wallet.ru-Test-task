@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Connections;
 using Npgsql;
 using TestTask.Server.Interfaces;
 

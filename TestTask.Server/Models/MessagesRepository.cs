@@ -31,20 +31,7 @@ public class MessagesRepository(IDbConnectionFactory connectionFactory) : IMessa
     {
         await using var conn = connectionFactory.NewConnection();
         await conn.OpenAsync(token);
-        
-        var queryBuilder = new StringBuilder("SELECT * FROM messages WHERE 1=1");
-        if (from.HasValue)
-            queryBuilder.Append(" AND CreatedAt >= @From");
-        if (to.HasValue)
-            queryBuilder.Append(" AND CreatedAt <= @To");
-        var query = queryBuilder.ToString();
-        await using var cmd = new NpgsqlCommand(query, conn);
-        
-        if (from.HasValue)
-            cmd.Parameters.AddWithValue("From", from.Value);
-        if (to.HasValue)
-            cmd.Parameters.AddWithValue("To", to.Value);
-        
+        await using var cmd = GetMessagesCommand(conn, from, to);
         var messages = new List<Message>();
         await using var reader = await cmd.ExecuteReaderAsync(token);
 
@@ -59,5 +46,32 @@ public class MessagesRepository(IDbConnectionFactory connectionFactory) : IMessa
             });
         }
         return messages;
+    }
+
+    private static NpgsqlCommand GetMessagesCommand(NpgsqlConnection conn, DateTime? from, DateTime? to)
+    {
+        var query = GetMessagesQuery(from, to);
+        var cmd = new NpgsqlCommand(query, conn);
+        
+        if (from.HasValue)
+            cmd.Parameters.AddWithValue("From", from.Value);
+        if (to.HasValue)
+            cmd.Parameters.AddWithValue("To", to.Value);
+
+        return cmd;
+    }
+
+    private static string GetMessagesQuery(DateTime? from, DateTime? to)
+    {
+        var queryBuilder = new StringBuilder("SELECT * FROM messages");
+        if (from.HasValue || to.HasValue)
+            queryBuilder.Append(" WHERE ");
+        if (from.HasValue)
+            queryBuilder.Append("CreatedAt >= @From");
+        if (from.HasValue && to.HasValue)
+            queryBuilder.Append(" AND ");
+        if (to.HasValue)
+            queryBuilder.Append("CreatedAt <= @To");
+        return queryBuilder.ToString();
     }
 }

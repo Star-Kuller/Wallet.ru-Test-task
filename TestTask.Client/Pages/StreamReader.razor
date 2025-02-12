@@ -7,7 +7,13 @@
     <NavLink href="/" class="nav-link">Назад</NavLink>
     
     <p class="info-text">Состояние не сохраняется. Отображаются только те сообщения, которые были приняты пока страница активна.</p>
-
+    @if (_error is not null)
+    {
+    <div class="error-container">
+        <p class="error-message">@_error.Message</p>
+    </div>
+    }
+    
     @if (_receivedMessages.Count == 0)
     {
         <div class="no-messages">
@@ -39,13 +45,6 @@
                 }
                 </tbody>
             </table>
-        </div>
-    }
-
-    @if (_error is not null)
-    {
-        <div class="error-container">
-            <p class="error-message">Ошибка: @_error.Message</p>
         </div>
     }
 </div>
