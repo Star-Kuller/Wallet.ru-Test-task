@@ -8,10 +8,10 @@
 
     <div class="date-picker-container">
         <label for="startDate">Начальная дата:</label>
-        <input type="date" id="startDate" @bind="_startDate" />
+        <input type="date" id="startDate" @bind="_fromDate" />
 
         <label for="endDate">Конечная дата:</label>
-        <input type="date" id="endDate" @bind="_endDate" />
+        <input type="date" id="endDate" @bind="_toDate" />
 
         <button class="request-button" @onclick="FetchMessages">Запросить</button>
     </div>

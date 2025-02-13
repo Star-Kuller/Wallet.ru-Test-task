@@ -19,6 +19,8 @@
     background-color: #fff;
     font-size: 14px;
     word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 600px;
 }
 
 .messages-table tr:nth-child(even) {

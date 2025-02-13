@@ -19,6 +19,8 @@
     background-color: #fff;
     font-size: 14px;
     word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 600px;
 }
 
 .messages-table tr:nth-child(even) {
@@ -69,4 +71,40 @@
 .no-messages:hover {
     background-color: #dee2e6;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+.date-picker-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.date-picker-container label {
+    font-weight: bold;
+    color: #555;
+}
+
+.date-picker-container input[type="date"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.request-button {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.request-button:hover {
+    background-color: #2980b9;
 }

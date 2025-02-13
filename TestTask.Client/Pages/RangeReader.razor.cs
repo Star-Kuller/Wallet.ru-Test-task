@@ -9,8 +9,8 @@ public partial class RangeReader : ComponentBase
 {
     private List<Message> _receivedMessages = [];
     private Error? _error = null;
-    private string _startDate;
-    private string _endDate;
+    private DateTime _fromDate = DateTime.Now;
+    private DateTime _toDate = DateTime.Now;
     [Inject]
     private IMessageService MessageService { get; set; }
 
@@ -18,16 +18,9 @@ public partial class RangeReader : ComponentBase
     {
         _receivedMessages.Clear();
         _error = null;
-        if (!DateTime.TryParse(_startDate, out var from))
-        {
-            _error = new Error("Не получилось распознать начальную дату");
-            return;
-        }
-        if (!DateTime.TryParse(_startDate, out var to))
-        {
-            _error = new Error("Не получилось распознать начальную дату");
-            return;
-        }
+        var from = _fromDate.Date;
+        var to = _toDate.Date.Add(new TimeSpan(00, 23, 59, 59, 999));
+        Console.WriteLine($"DataRange: {from} - {to}");
         _receivedMessages = (await MessageService.GetMessagesAsync(from, to)).ToList();
     }
 }
