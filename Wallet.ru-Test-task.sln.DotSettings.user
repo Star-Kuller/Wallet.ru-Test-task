@@ -1,6 +1,23 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=78345d31_002Dfd91_002D4283_002D9276_002D4a8d1d47bf21/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="HandleWebSocket_ShouldReturnBadRequest_WhenNotWebSocketRequest #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::03E4C75D-4BD2-456E-99A7-E5B9B5F77C62::net8.0::TestTask.Server_Tests.MessagesWebsocketControllerTests.HandleWebSocket_ShouldReturnBadRequest_WhenNotWebSocketRequest&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=8ff921c6_002D82fb_002D47ad_002D8312_002Df15281b039bd/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="HandleWebSocket_ShouldReturnBadRequest_WhenNotWebSocketRequest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::03E4C75D-4BD2-456E-99A7-E5B9B5F77C62::net8.0::TestTask.Server_Tests.MessagesWebsocketControllerTests.HandleWebSocket_ShouldReturnBadRequest_WhenNotWebSocketRequest&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=cc15168e_002D0ce7_002D4d72_002Db43b_002D481904d516f5/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="AddMessageAsync_ShouldSetMessageId_WhenInsertSucceeds" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::03E4C75D-4BD2-456E-99A7-E5B9B5F77C62::net8.0::TestTask.Server_Tests.MessagesRepositoryTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::03E4C75D-4BD2-456E-99A7-E5B9B5F77C62::net8.0::TestTask.Server_Tests.MessagesControllerTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::03E4C75D-4BD2-456E-99A7-E5B9B5F77C62::net8.0::TestTask.Server_Tests.MessagesWebsocketControllerTests&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=fb416e32_002D216c_002D4434_002D9dbe_002D357ce0d752a6/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="HandleWebSocket_ShouldReturnBadRequest_WhenNotWebSocketRequest #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::03E4C75D-4BD2-456E-99A7-E5B9B5F77C62::net8.0::TestTask.Server_Tests.MessagesWebsocketControllerTests.HandleWebSocket_ShouldReturnBadRequest_WhenNotWebSocketRequest&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

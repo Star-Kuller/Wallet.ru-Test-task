@@ -1,0 +1,48 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  server:
+    build:
+      context: ./TestTask.Server
+      dockerfile: Dockerfile
+    container_name: server
+    environment:
+      - ASPNETCORE_ENVIRONMENT=docker
+    ports:
+      - "5000:80"
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+
+  client:
+    build:
+      context: ./TestTask.Client
+      dockerfile: Dockerfile
+    container_name: client
+    environment:
+      - ASPNETCORE_ENVIRONMENT=docker
+    ports:
+      - "7102:80"
+    depends_on:
+      - server
+    networks:
+      - app-network
+
+volumes:
+  postgres_data:
+
+networks:
+  app-network:
+    driver: bridge

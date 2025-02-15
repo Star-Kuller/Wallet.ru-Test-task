@@ -6,7 +6,7 @@ namespace TestTask.Server.Controllers;
 
 public abstract class WebSocketControllerBase : IWebsocketController
 {
-    protected readonly ConcurrentBag<WebSocket> Sockets = [];
+    public readonly ConcurrentBag<WebSocket> Sockets = [];
     
     public async Task HandleWebSocket(HttpContext context)
     {
