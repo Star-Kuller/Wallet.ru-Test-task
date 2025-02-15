@@ -1,14 +1,14 @@
-using Npgsql;
 using TestTask.Server.Controllers;
 using TestTask.Server.Infrastructure;
+using TestTask.Server.Infrastructure.Database;
 using TestTask.Server.Interfaces;
+using TestTask.Server.Interfaces.Database;
 using TestTask.Server.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
-// Add services to the container.
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -27,6 +27,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddTransient<IMessagesRepository, MessagesRepository>();
 builder.Services.AddSingleton<IMessagesWebsocketController, MessagesWebsocketController>();
 builder.Services.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
+builder.Services.AddTransient<IDatabaseExecutor, DatabaseExecutor>();
 builder.Services.AddSingleton<DatabaseParameters>(provider =>
     builder.Configuration.GetSection("Database").Get<DatabaseParameters>());
 
@@ -39,7 +40,6 @@ app.Map("/wsMessages", async (HttpContext context, IMessagesWebsocketController 
     await messagesWsController.HandleWebSocket(context);
 });
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -52,10 +52,17 @@ app.UseMiddleware<ErrorHandlerMiddleware>();
 
 app.UseCors("AllowAll");
 
-var databaseParameters = app.Configuration.GetSection("Database").Get<DatabaseParameters>();
-var logger = app.Services.GetRequiredService<ILogger<Program>>();
-var connectionFactory = app.Services.GetRequiredService<IDbConnectionFactory>();
-await DatabaseInitialize.CreateDatabaseIfNotExist(databaseParameters, logger);
-await DatabaseInitialize.CreateTablesIfNotExist(connectionFactory, logger);
+await CreateDatabaseAsync(app);
 
 app.Run();
+
+return;
+
+async Task CreateDatabaseAsync(WebApplication webApplication)
+{
+    var databaseParameters = webApplication.Configuration.GetSection("Database").Get<DatabaseParameters>();
+    var logger = webApplication.Services.GetRequiredService<ILogger<Program>>();
+    var connectionFactory = webApplication.Services.GetRequiredService<IDbConnectionFactory>();
+    await DatabaseInitialize.CreateDatabaseIfNotExist(databaseParameters, logger);
+    await DatabaseInitialize.CreateTablesIfNotExist(connectionFactory, logger);
+}

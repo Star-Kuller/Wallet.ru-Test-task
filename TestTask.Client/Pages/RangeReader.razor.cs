@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using TestTask.Client.Infrastructure;
+using TestTask.Client.Infrastructure.Exceptions;
 using TestTask.Client.Interfaces;
 using TestTask.Client.Models;
 
@@ -20,7 +21,22 @@ public partial class RangeReader : ComponentBase
         _error = null;
         var from = _fromDate.Date;
         var to = _toDate.Date.Add(new TimeSpan(00, 23, 59, 59, 999));
-        Console.WriteLine($"DataRange: {from} - {to}");
-        _receivedMessages = (await MessageService.GetMessagesAsync(from, to)).ToList();
+        try
+        {
+            _receivedMessages = (await MessageService.GetMessagesAsync(from, to)).ToList();
+        }
+        catch (NoConnectHttpException e)
+        {
+            _error = new Error("Нет соединения с сервером");
+        }
+        catch (HttpRequestException e)
+        {
+            _error = new Error(e.Message);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 }

@@ -1,7 +1,7 @@
 using Npgsql;
-using TestTask.Server.Interfaces;
+using TestTask.Server.Interfaces.Database;
 
-namespace TestTask.Server.Infrastructure;
+namespace TestTask.Server.Infrastructure.Database;
 
 public class DbConnectionFactory(DatabaseParameters parameters) : IDbConnectionFactory
 {

@@ -9,7 +9,6 @@ namespace TestTask.Server.Controllers
     [ApiController]
     [Route("messages")]
     public class MessagesController(
-        ILogger<MessagesController> logger,
         IMessagesRepository repository,
         IMessagesWebsocketController websocketController) : ControllerBase
     {
@@ -18,6 +17,7 @@ namespace TestTask.Server.Controllers
         {
             if (from > to)
                 throw new ValidationException("Начальная дата не может быть больше конечной");
+            
             var messages = await repository.GetMessagesAsync(from, to);
             return messages;
         }

@@ -1,4 +1,4 @@
-namespace TestTask.Server.Infrastructure;
+namespace TestTask.Server.Infrastructure.Database;
 
 public class DatabaseParameters
 {

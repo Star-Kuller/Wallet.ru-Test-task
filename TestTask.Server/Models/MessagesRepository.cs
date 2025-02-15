@@ -1,71 +1,69 @@
+using System.Data;
 using System.Text;
-using Npgsql;
+using TestTask.Server.Exceptions;
 using TestTask.Server.Interfaces;
+using TestTask.Server.Interfaces.Database;
 
 namespace TestTask.Server.Models;
 
-public class MessagesRepository(IDbConnectionFactory connectionFactory) : IMessagesRepository
+public class MessagesRepository(IDatabaseExecutor databaseExecutor)
+    : IMessagesRepository
 {
     public async Task AddMessageAsync(Message message, CancellationToken token = default)
     {
-        await using var conn = connectionFactory.NewConnection();
-        await conn.OpenAsync(token);
+        if (message is null)
+            throw new ArgumentNullException(nameof(message), "Message cannot be null");
         
-        const string insertQuery =
-            """
-            INSERT INTO messages (OrderNumber, Content)
-                    VALUES (@OrderNumber, @Content)
-                    RETURNING Id;
+        try
+        {
+            const string insertQuery = """
+                INSERT INTO messages (OrderNumber, CreatedAt, Content)
+                VALUES (@OrderNumber, @CreatedAt, @Content)
+                RETURNING Id;
             """;
 
-        await using var cmd = new NpgsqlCommand(insertQuery, conn);
-        cmd.Parameters.AddWithValue("OrderNumber", message.OrderNumber);
-        cmd.Parameters.AddWithValue("Content", message.Content);
-        
-        var result = await cmd.ExecuteScalarAsync(token);
-        if (result is long id)
+            var parameters = new Dictionary<string, object?>
+            {
+                { "OrderNumber", message.OrderNumber },
+                { "CreatedAt", message.CreatedAt },
+                { "Content", message.Content }
+            };
+
+            var id = await databaseExecutor.ExecuteCommandAsync<long>(insertQuery, parameters, token);
             message.Id = id;
+        }
+        catch (Exception ex)
+        {
+            throw new RepositoryException("Failed to add message.", ex);
+        }
     }
 
     public async Task<IEnumerable<Message>> GetMessagesAsync(DateTime? from, DateTime? to, CancellationToken token = default)
     {
-        await using var conn = connectionFactory.NewConnection();
-        await conn.OpenAsync(token);
-        await using var cmd = GetMessagesCommand(conn, from, to);
-        var messages = new List<Message>();
-        await using var reader = await cmd.ExecuteReaderAsync(token);
-
-        while (await reader.ReadAsync(token))
+        try
         {
-            messages.Add(new Message
-            {
-                Id = reader.GetInt64(reader.GetOrdinal("Id")),
-                OrderNumber = reader.GetInt32(reader.GetOrdinal("OrderNumber")),
-                CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt")),
-                Content = reader.GetString(reader.GetOrdinal("Content"))
-            });
+            var query = BuildGetMessagesQuery(from, to);
+            
+            var parameters = new Dictionary<string, object?>();
+            if (from.HasValue)
+                parameters["From"] = from.Value;
+            if (to.HasValue)
+                parameters["To"] = to.Value;
+
+            return await databaseExecutor.GetListAsync(query, parameters, MapMessage, token);
         }
-        return messages;
+        catch (Exception ex)
+        {
+            throw new RepositoryException("Failed to retrieve messages.", ex);
+        }
     }
-
-    private static NpgsqlCommand GetMessagesCommand(NpgsqlConnection conn, DateTime? from, DateTime? to)
-    {
-        var query = GetMessagesQuery(from, to);
-        var cmd = new NpgsqlCommand(query, conn);
-        
-        if (from.HasValue)
-            cmd.Parameters.AddWithValue("From", from.Value);
-        if (to.HasValue)
-            cmd.Parameters.AddWithValue("To", to.Value);
-
-        return cmd;
-    }
-
-    private static string GetMessagesQuery(DateTime? from, DateTime? to)
+    
+    private static string BuildGetMessagesQuery(DateTime? from, DateTime? to)
     {
         var queryBuilder = new StringBuilder("SELECT * FROM messages");
-        if (from.HasValue || to.HasValue)
-            queryBuilder.Append(" WHERE ");
+        if (!from.HasValue && !to.HasValue) return queryBuilder.ToString();
+        
+        queryBuilder.Append(" WHERE ");
         if (from.HasValue)
             queryBuilder.Append("CreatedAt >= @From");
         if (from.HasValue && to.HasValue)
@@ -73,5 +71,16 @@ public class MessagesRepository(IDbConnectionFactory connectionFactory) : IMessa
         if (to.HasValue)
             queryBuilder.Append("CreatedAt <= @To");
         return queryBuilder.ToString();
+    }
+    
+    private static Message MapMessage(IDataRecord record)
+    {
+        return new Message
+        {
+            Id = record.GetInt64(record.GetOrdinal("Id")),
+            OrderNumber = record.GetInt32(record.GetOrdinal("OrderNumber")),
+            CreatedAt = record.GetDateTime(record.GetOrdinal("CreatedAt")),
+            Content = record.GetString(record.GetOrdinal("Content"))
+        };
     }
 }

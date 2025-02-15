@@ -1,6 +1,6 @@
 using Npgsql;
 
-namespace TestTask.Server.Interfaces;
+namespace TestTask.Server.Interfaces.Database;
 
 public interface IDbConnectionFactory
 {

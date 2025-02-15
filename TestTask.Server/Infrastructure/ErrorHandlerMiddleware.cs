@@ -10,20 +10,27 @@ public class ErrorHandlerMiddleware(RequestDelegate next)
         {
             await next(context);
         }
-        catch (ValidationException e)
+        catch (ValidationException ex)
         {
             context.Response.ContentType = "application/text";
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
-            logger.LogWarning(e.Message);
-            await context.Response.WriteAsync(e.Message);
+            logger.LogWarning(ex, "Ошибка валидации");
+            await context.Response.WriteAsync(ex.Message);
         }
-        catch (Exception e)
+        catch (RepositoryException ex)
         {
             context.Response.ContentType = "application/text";
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-            logger.LogCritical("Error: {Message} | StackTrace:\n{StackTrace}", e.Message, e.StackTrace);
+            logger.LogWarning(ex, "Ошибка сохранения в базу данных");
+            await context.Response.WriteAsync("Ошибка сохранения в базу данных");
+        }
+        catch (Exception ex)
+        {
+            context.Response.ContentType = "application/text";
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+            logger.LogCritical(ex, "Необработанная ошибка");
             //Передаём ошибку, но не stacktrace
-            await context.Response.WriteAsync(e.Message);
+            await context.Response.WriteAsync(ex.Message);
         }
     }
 }
