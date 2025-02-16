@@ -1,0 +1,39 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  client:
+    build:
+      context: "C:\\MyProjects\\Wallet.ru-Test-task\\TestTask.Client"
+      dockerfile: "Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/../../../Users/UserD/.nuget/packages/microsoft.aspnetcore.components.webassembly.devserver/8.0.12/tools/blazor-devserver.dll"
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "testtask.client:dev"
+    ports: []
+    volumes:
+    - "C:\\Users\\UserD\\.nuget\\packages:/home/app/.nuget/packages"
+    - "C:\\MyProjects\\Wallet.ru-Test-task\\TestTask.Client:/app:rw"
+    - "C:\\MyProjects\\Wallet.ru-Test-task:/src:rw"
+    working_dir: "/app"
+  server:
+    build:
+      context: "C:\\MyProjects\\Wallet.ru-Test-task\\TestTask.Server"
+      dockerfile: "Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net8.0/TestTask.Server.dll"
+    environment:
+      ASPNETCORE_STATICWEBASSETS: "/app/bin/Debug/net8.0/TestTask.Server.staticwebassets.runtime.CT.json"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "testtask.server:dev"
+    ports: []
+    volumes:
+    - "C:\\Users\\UserD\\.nuget\\packages:/home/app/.nuget/packages"
+    - "C:\\MyProjects\\Wallet.ru-Test-task\\TestTask.Server:/app:rw"
+    - "C:\\MyProjects\\Wallet.ru-Test-task:/src:rw"
+    working_dir: "/app"

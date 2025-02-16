@@ -1,23 +1,30 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER $APP_UID
+﻿# Сборка приложения
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
+# Копирование проектных файлов
 COPY ["TestTask.Client/TestTask.Client.csproj", "TestTask.Client/"]
 RUN dotnet restore "TestTask.Client/TestTask.Client.csproj"
+
+# Копирование остальных файлов
 COPY . .
-WORKDIR "/src/TestTask.Client"
-RUN dotnet build "TestTask.Client.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "TestTask.Client.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+# Публикация проекта
+WORKDIR "/app/TestTask.Client"
+RUN dotnet publish -c Release -o /app/output
 
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "TestTask.Client.dll"]
+# Финальный образ с Nginx
+FROM nginx:alpine AS final
+WORKDIR /var/www/web
+
+# Копирование статических файлов из папки wwwroot
+COPY --from=build-env /app/output/wwwroot .
+
+# Копирование конфигурации Nginx
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Открытие порта
+EXPOSE 80
+
+# Запуск Nginx
+CMD ["nginx", "-g", "daemon off;"]
