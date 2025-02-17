@@ -7,28 +7,40 @@ public static class DatabaseInitialize
 {
     public static async Task CreateDatabaseIfNotExist(DatabaseParameters parameters, ILogger logger)
     {
-        try
-        {
-            await using var conn = new NpgsqlConnection(parameters.PostgresHost);
-            conn.Open();
+        const int retryCount = 5;
+        const int delayMs = 3000;
 
-            await using var cmd = new NpgsqlCommand($"SELECT 1 FROM pg_database WHERE datname = '{parameters.DatabaseName}'", conn);
-            var result = await cmd.ExecuteScalarAsync();
-            if (result == null)
-            {
-                await using var createCmd = new NpgsqlCommand($"CREATE DATABASE \"{parameters.DatabaseName}\"", conn);
-                await createCmd.ExecuteNonQueryAsync();
-                logger.LogInformation("База данных \'{ParametersDatabaseName}\' успешно создана", parameters.DatabaseName);
-            }
-            else
-            {
-                logger.LogInformation("База данных \'{ParametersDatabaseName}\' уже существует", parameters.DatabaseName);
-            }
-        }
-        catch (Exception ex)
+        for (var attempt = 1; attempt <= retryCount; attempt++)
         {
-            logger.LogCritical(ex, "Ошибка создания базы данных");
-            throw;
+            try
+            {
+                await using var conn = new NpgsqlConnection(parameters.PostgresHost);
+                conn.Open();
+                await using var cmd = new NpgsqlCommand($"SELECT 1 FROM pg_database WHERE datname = '{parameters.DatabaseName}'", conn);
+                var result = await cmd.ExecuteScalarAsync();
+
+                if (result == null)
+                {
+                    await using var createCmd = new NpgsqlCommand($"CREATE DATABASE \"{parameters.DatabaseName}\"", conn);
+                    await createCmd.ExecuteNonQueryAsync();
+                    logger.LogInformation("База данных '{ParametersDatabaseName}' успешно создана", parameters.DatabaseName);
+                }
+                else
+                {
+                    logger.LogInformation("База данных '{ParametersDatabaseName}' уже существует", parameters.DatabaseName);
+                }
+
+                return;
+            }
+            catch (NpgsqlException ex)
+            {
+                logger.LogWarning(ex, "Попытка {Attempt} из {RetryCount} завершилась неудачей. Повтор через {DelayMs} мс...", attempt, retryCount, delayMs);
+                await Task.Delay(delayMs);
+            }
+            catch (Exception ex)
+            {
+                logger.LogCritical(ex, "Ошибка создания базы данных");
+            }
         }
     }
 
@@ -55,7 +67,6 @@ public static class DatabaseInitialize
         catch (Exception ex)
         {
             logger.LogCritical(ex, "Ошибка создания таблиц");
-            throw;
         }
     }
 }

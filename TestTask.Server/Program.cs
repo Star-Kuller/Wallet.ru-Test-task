@@ -7,8 +7,6 @@ using TestTask.Server.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -28,8 +26,8 @@ builder.Services.AddTransient<IMessagesRepository, MessagesRepository>();
 builder.Services.AddSingleton<IMessagesWebsocketController, MessagesWebsocketController>();
 builder.Services.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
 builder.Services.AddTransient<IDatabaseExecutor, DatabaseExecutor>();
-builder.Services.AddSingleton<DatabaseParameters>(provider =>
-    builder.Configuration.GetSection("Database").Get<DatabaseParameters>());
+builder.Services.AddSingleton<DatabaseParameters>(_ =>
+    builder.Configuration.GetSection("Database").Get<DatabaseParameters>()!);
 
 var app = builder.Build();
 
@@ -58,7 +56,7 @@ return;
 
 async Task CreateDatabaseAsync(WebApplication webApplication)
 {
-    var databaseParameters = webApplication.Configuration.GetSection("Database").Get<DatabaseParameters>();
+    var databaseParameters = webApplication.Configuration.GetSection("Database").Get<DatabaseParameters>()!;
     var logger = webApplication.Services.GetRequiredService<ILogger<Program>>();
     var connectionFactory = webApplication.Services.GetRequiredService<IDbConnectionFactory>();
     await DatabaseInitialize.CreateDatabaseIfNotExist(databaseParameters, logger);

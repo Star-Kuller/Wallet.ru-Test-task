@@ -10,6 +10,7 @@ services:
     - "dotnet"
     - "/app/../../../Users/UserD/.nuget/packages/microsoft.aspnetcore.components.webassembly.devserver/8.0.12/tools/blazor-devserver.dll"
     environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
       DOTNET_USE_POLLING_FILE_WATCHER: "true"
     image: "testtask.client:dev"
     ports: []
@@ -28,7 +29,6 @@ services:
     - "dotnet"
     - "/app/bin/Debug/net8.0/TestTask.Server.dll"
     environment:
-      ASPNETCORE_STATICWEBASSETS: "/app/bin/Debug/net8.0/TestTask.Server.staticwebassets.runtime.CT.json"
       DOTNET_USE_POLLING_FILE_WATCHER: "true"
     image: "testtask.server:dev"
     ports: []

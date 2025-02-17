@@ -8,17 +8,22 @@ public class DatabaseExecutor(IDbConnectionFactory connectionFactory) : IDatabas
 {
     public async Task<T?> ExecuteCommandAsync<T>(string query, IDictionary<string, object?> parameters, CancellationToken token = default)
     {
-        await using var cmd = await GetCommand(query, parameters, token);
+        await using var conn = connectionFactory.NewConnection();
+        await conn.OpenAsync(token);
         
+        await using var cmd = GetCommand(conn, query, parameters);
         var result = await cmd.ExecuteScalarAsync(token);
         return (T?)Convert.ChangeType(result, typeof(T));
     }
 
     public async Task<IEnumerable<T>> GetListAsync<T>(string query, IDictionary<string, object?> parameters, Func<IDataRecord, T> map, CancellationToken token = default)
     {
-        await using var cmd = await GetCommand(query, parameters, token);
+        await using var conn = connectionFactory.NewConnection();
+        await conn.OpenAsync(token);
         
+        await using var cmd = GetCommand(conn, query, parameters);
         await using var reader = await cmd.ExecuteReaderAsync(token);
+        
         var results = new List<T>();
         while (await reader.ReadAsync(token))
         {
@@ -27,11 +32,8 @@ public class DatabaseExecutor(IDbConnectionFactory connectionFactory) : IDatabas
         return results;
     }
 
-    private async Task<NpgsqlCommand> GetCommand(string query, IDictionary<string, object?> parameters, CancellationToken token)
+    private NpgsqlCommand GetCommand(NpgsqlConnection conn, string query, IDictionary<string, object?> parameters)
     {
-        await using var conn = connectionFactory.NewConnection();
-        await conn.OpenAsync(token);
-
         var cmd = new NpgsqlCommand(query, conn);
         foreach (var param in parameters)
         {

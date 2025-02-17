@@ -21,8 +21,8 @@ public class ErrorHandlerMiddleware(RequestDelegate next)
         {
             context.Response.ContentType = "application/text";
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-            logger.LogWarning(ex, "Ошибка сохранения в базу данных");
-            await context.Response.WriteAsync("Ошибка сохранения в базу данных");
+            logger.LogWarning(ex, "Ошибка базы данных данных");
+            await context.Response.WriteAsync("Ошибка базы данных базу данных");
         }
         catch (Exception ex)
         {
