@@ -40,11 +40,9 @@ app.Map("/wsMessages", async (HttpContext context, IMessagesWebsocketController 
     await messagesWsController.HandleWebSocket(context);
 });
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
+
 app.UseHttpsRedirection();
 app.MapControllers();
 

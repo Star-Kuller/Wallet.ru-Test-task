@@ -1,30 +1,22 @@
-﻿# Сборка приложения
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+﻿FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 WORKDIR /app
 
-# Копирование проектных файлов
-COPY ["TestTask.Client/TestTask.Client.csproj", "TestTask.Client/"]
-RUN dotnet restore "TestTask.Client/TestTask.Client.csproj"
+COPY ["TestTask.Client.csproj", "./"]
+RUN dotnet restore "TestTask.Client.csproj"
 
-# Копирование остальных файлов
 COPY . .
+COPY ./wwwroot/appsettings.docker.json ./wwwroot/appsettings.json
 
-# Публикация проекта
-WORKDIR "/app/TestTask.Client"
+WORKDIR "/app"
 RUN dotnet publish -c Release -o /app/output
 
-# Финальный образ с Nginx
 FROM nginx:alpine AS final
 WORKDIR /var/www/web
 
-# Копирование статических файлов из папки wwwroot
 COPY --from=build-env /app/output/wwwroot .
 
-# Копирование конфигурации Nginx
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Открытие порта
 EXPOSE 80
 
-# Запуск Nginx
 CMD ["nginx", "-g", "daemon off;"]

@@ -4,7 +4,7 @@ services:
     build:
       context: "C:\\MyProjects\\Wallet.ru-Test-task\\TestTask.Client"
       dockerfile: "Dockerfile"
-      target: "base"
+      target: "build-env"
     command: []
     entrypoint:
     - "dotnet"
@@ -14,7 +14,7 @@ services:
     image: "testtask.client:dev"
     ports: []
     volumes:
-    - "C:\\Users\\UserD\\.nuget\\packages:/home/app/.nuget/packages"
+    - "C:\\Users\\UserD\\.nuget\\packages:/root/.nuget/packages"
     - "C:\\MyProjects\\Wallet.ru-Test-task\\TestTask.Client:/app:rw"
     - "C:\\MyProjects\\Wallet.ru-Test-task:/src:rw"
     working_dir: "/app"
